@@ -1,12 +1,9 @@
 const express = require('express');
-const app = express();
 const db = require('../config/db');
 
 
-const authenticate = require('../middleware/authenticate.middleware');
-
 // API user request to become editor
-app.post('/request-editor', authenticate, async (req, res) => {
+const request_editor = async (req, res) => {
     try {
         const userId = req.user.id; // Lấy user_id từ middleware authenticate
 
@@ -23,6 +20,6 @@ app.post('/request-editor', authenticate, async (req, res) => {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
     }
-});
+};
 
-module.exports = router;
+module.exports = request_editor();

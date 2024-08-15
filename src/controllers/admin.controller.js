@@ -1,22 +1,22 @@
 const express = require('express');
 const app = express();
 const db = require('../config/db');
-const authenticate = require('../middleware/authenticate.middleware');
-const authorize = require('../middleware/authorize.middleware'); // Middleware check admin role
+
 
 // API get list user's request is pending
-app.get('/editor-requests', authenticate, authorize('admin'), async (req, res) => {
+const list_request = async (req, res) => {
     try {
         const [list] = await db.query('SELECT ur.id, u.username, ur.request_status, ur.resource_id FROM user_requests ur JOIN users u ON ur.user_id = u.id WHERE ur.request_status = ?', ['pending']);
-        res.json(list);
+        res.json(list); //tra ve list user dang yeu cau cap quyen
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error, please try again later.' });
     }
-});
+};
 
 
-app.put('/editor-requests/:id/approve', authenticate, authorize('admin'), async (req, res) => {
+const accept_request =  async (req, res) => {
     const requestId = req.params.id;
 
     try {
@@ -33,9 +33,9 @@ app.put('/editor-requests/:id/approve', authenticate, authorize('admin'), async 
         console.error(error);
         res.status(500).json({ message: 'Server error, please try again later.' });
     }
-});
+};
 
-app.put('/editor-requests/:id/deny', authenticate, authorize('admin'), async (req, res) => {
+const denied_request =  async (req, res) => {
     const requestId = req.params.id;
 
     try {
@@ -46,9 +46,11 @@ app.put('/editor-requests/:id/deny', authenticate, authorize('admin'), async (re
         console.error(error);
         res.status(500).json({ message: 'Server error, please try again later.' });
     }
-});
+};
 
 
 
 
-module.exports = app;
+module.exports = list_request();
+module.exports = accept_request();
+module.exports = denied_request();

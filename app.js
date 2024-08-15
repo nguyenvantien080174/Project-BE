@@ -2,14 +2,11 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 
-const admin = require ('./src/routes/admin');
-const RequestEditor = require('./src/routes/request-editor.router')
-
+const router = require('./src/routes/router')
 app.get('/', (req, res) => {
     res.send('Hello world!!!!');
 })
-app.use('/api', admin);
-app.use('/api', RequestEditor);
+app.use('/api', router);
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
